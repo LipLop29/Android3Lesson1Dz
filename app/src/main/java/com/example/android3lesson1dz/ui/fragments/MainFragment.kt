@@ -11,33 +11,31 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.android3lesson1dz.data.model.GeneralModel
 import com.example.android3lesson1dz.ui.adaptetr.GeneralAdapter
-import com.example.android3lesson1dz.ui.viewmodels.MainFragmentViewModel
 import com.example.android3lesson1dz.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private var viewModel: MainFragmentViewModel? = null
-    private var listCat = mutableListOf<GeneralModel>()
-    private var generalAdapter = GeneralAdapter(this::onItemClick,listCat)
+    private var generalAdapter = GeneralAdapter(this::onItemClick)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[MainFragmentViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainFragmentViewModel::class.java]
         initialize()
         setupList()
+        setupObserves()
     }
 
     private fun initialize() {
-        viewModel?.let { listCat.addAll(it.getListOfCatHTP()) }
         binding.recycler.adapter = generalAdapter
     }
 
@@ -46,6 +44,12 @@ class MainFragment : Fragment() {
             binding.recycler.isVisible = true
             binding.btnShow.isVisible = false
             binding.tvText.isVisible = false
+        }
+    }
+
+    private fun setupObserves() {
+        viewModel?.getListOfCatHTP()?.observe(viewLifecycleOwner) {
+            generalAdapter.setList(it)
         }
     }
 

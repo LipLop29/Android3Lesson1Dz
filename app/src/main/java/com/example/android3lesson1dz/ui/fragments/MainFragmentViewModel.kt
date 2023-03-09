@@ -1,13 +1,17 @@
-package com.example.android3lesson1dz.ui.viewmodels
+package com.example.android3lesson1dz.ui.fragments
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android3lesson1dz.data.model.GeneralModel
 
 class MainFragmentViewModel : ViewModel() {
 
-    private var generalModelArrayList : ArrayList<GeneralModel> = ArrayList()
+    private var list: MutableLiveData<ArrayList<GeneralModel>> = MutableLiveData()
 
-    fun getListOfCatHTP(): ArrayList<GeneralModel> {
+    fun getListOfCatHTP(): MutableLiveData<ArrayList<GeneralModel>> {
+
+        val generalModelArrayList: ArrayList<GeneralModel> = ArrayList()
+
         generalModelArrayList.add(GeneralModel("https://http.cat/100", "Continue"))
         generalModelArrayList.add(GeneralModel("https://http.cat/101", "Switching Protocols"))
         generalModelArrayList.add(GeneralModel("https://http.cat/102", "Processing"))
@@ -37,6 +41,7 @@ class MainFragmentViewModel : ViewModel() {
         generalModelArrayList.add(GeneralModel("https://http.cat/407", "Proxy Authentication Required"))
         generalModelArrayList.add(GeneralModel("https://http.cat/408", "Request Timeout"))
         generalModelArrayList.add(GeneralModel("https://http.cat/409", "Conflict"))
-        return generalModelArrayList
+        list.value = generalModelArrayList
+        return list
     }
 }

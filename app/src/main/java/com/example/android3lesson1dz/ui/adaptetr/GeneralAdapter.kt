@@ -7,21 +7,27 @@ import com.bumptech.glide.Glide
 import com.example.android3lesson1dz.data.model.GeneralModel
 import com.example.android3lesson1dz.databinding.ItemMainBinding
 
-class GeneralAdapter(val onItemClick : (generalModel: GeneralModel) -> Unit
-                     ,private val listList: MutableList<GeneralModel>) :
+class GeneralAdapter(
+    val onItemClick : (generalModel: GeneralModel) -> Unit) :
     RecyclerView.Adapter<GeneralAdapter.GeneralViewHolder>() {
+
+    private var list: List<GeneralModel> = ArrayList()
+
+    fun setList(list: List<GeneralModel>){
+        this.list = list
+        notifyDataSetChanged()
+    }
 
     inner class GeneralViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.setOnClickListener{
-                onItemClick(listList[adapterPosition])
+                onItemClick(list[adapterPosition])
             }
         }
 
         fun onBind(generalModel: GeneralModel) {
-
             binding.tvName.text = generalModel.name
             Glide.with(binding.imgLogo.context).load(generalModel.img).into(binding.imgLogo)
         }
@@ -39,8 +45,8 @@ class GeneralAdapter(val onItemClick : (generalModel: GeneralModel) -> Unit
     }
 
     override fun onBindViewHolder(holder: GeneralViewHolder, position: Int) {
-        holder.onBind(listList[position])
+        holder.onBind(list[position])
     }
 
-    override fun getItemCount(): Int = listList.size
+    override fun getItemCount(): Int = list.size
 }
